@@ -1,0 +1,326 @@
+REPORTE DE RESULTADOS: HMM PARA EL RIESGO DE DESERCIÓN EN EDUCACIÓN VIRTUAL
+Parámetros supuestos e ilustrativos (no estimados de datos reales).
+
+==============================================================================
+Entorno
+==============================================================================
+Python 3.12.3 (Linux x86_64)
+numpy 2.5.4
+scipy 1.18.1
+pandas 3.1.1
+matplotlib 3.11.2
+hmmlearn 0.3.3
+pytest 9.2.0
+pylint 4.1.3
+Duración total: 1013.5 s
+
+==============================================================================
+Diseño
+==============================================================================
+Semilla base: 2026 (SeedSequence -> flujos -> semillas por réplica)
+Réplicas por escenario: 200; estudiantes por cohorte: 300; semanas: 16
+Baum-Welch: 50 réplicas; pi fijo; se aprenden A y B; tol = 1e-4 en la log-verosimilitud total; máximo 1000 iteraciones
+IC 95 %: t de Student con n-1 grados de libertad
+
+==============================================================================
+E1 Nominal: Parámetros nominales de partida
+==============================================================================
+pi = [0.7, 0.25, 0.05]
+A =
+    [0.8500, 0.1200, 0.0300]
+    [0.3000, 0.5500, 0.1500]
+    [0.0500, 0.1000, 0.8500]
+B =
+    [0.7000, 0.2500, 0.0500]
+    [0.2000, 0.5000, 0.3000]
+    [0.0300, 0.1700, 0.8000]
+Distribución estacionaria de A: Comprometido 0.5000, En riesgo 0.2000, Desconectado 0.3000
+Proporción teórica en Desconectado en la semana 16 (pi A^15): 0.2892
+A aprendida (media de réplicas):
+    [0.8468, 0.1201, 0.0331]
+    [0.3217, 0.5270, 0.1512]
+    [0.0494, 0.1011, 0.8495]
+B aprendida (media de réplicas):
+    [0.7035, 0.2434, 0.0530]
+    [0.1902, 0.5275, 0.2823]
+    [0.0303, 0.1695, 0.8002]
+
+==============================================================================
+E2 Intervención temprana: Tutoría: En riesgo->Comprometido 0.45 y En riesgo->Desconectado 0.08
+==============================================================================
+pi = [0.7, 0.25, 0.05]
+A =
+    [0.8500, 0.1200, 0.0300]
+    [0.4500, 0.4700, 0.0800]
+    [0.0500, 0.1000, 0.8500]
+B =
+    [0.7000, 0.2500, 0.0500]
+    [0.2000, 0.5000, 0.3000]
+    [0.0300, 0.1700, 0.8000]
+Distribución estacionaria de A: Comprometido 0.6059, En riesgo 0.1780, Desconectado 0.2161
+Proporción teórica en Desconectado en la semana 16 (pi A^15): 0.2083
+A aprendida (media de réplicas):
+    [0.8475, 0.1207, 0.0318]
+    [0.4607, 0.4606, 0.0787]
+    [0.0535, 0.0977, 0.8488]
+B aprendida (media de réplicas):
+    [0.7073, 0.2384, 0.0543]
+    [0.1828, 0.5431, 0.2742]
+    [0.0300, 0.1680, 0.8019]
+
+==============================================================================
+E3 Observación ruidosa: B difusa: la actividad informa menos sobre el estado real
+==============================================================================
+pi = [0.7, 0.25, 0.05]
+A =
+    [0.8500, 0.1200, 0.0300]
+    [0.3000, 0.5500, 0.1500]
+    [0.0500, 0.1000, 0.8500]
+B =
+    [0.5000, 0.3000, 0.2000]
+    [0.3000, 0.4000, 0.3000]
+    [0.1500, 0.3000, 0.5500]
+Distribución estacionaria de A: Comprometido 0.5000, En riesgo 0.2000, Desconectado 0.3000
+Proporción teórica en Desconectado en la semana 16 (pi A^15): 0.2892
+A aprendida (media de réplicas):
+    [0.8342, 0.1300, 0.0358]
+    [0.3248, 0.5437, 0.1315]
+    [0.0535, 0.0949, 0.8516]
+B aprendida (media de réplicas):
+    [0.5074, 0.2863, 0.2063]
+    [0.2970, 0.4306, 0.2724]
+    [0.1421, 0.2955, 0.5624]
+
+==============================================================================
+Resumen por escenario
+==============================================================================
+escenario                    metrica   n    media  desviacion   minimo   maximo  ic_inferior  ic_superior
+       E1         tasa_desercion_s16 200   0.2889      0.0264   0.1967   0.3533       0.2852       0.2926
+       E1 semana_primera_desconexion 200   7.2791      0.3367   6.3869   8.1591       7.2322       7.3261
+       E1      prop_nunca_desconecta 200   0.3856      0.0273   0.3233   0.4667       0.3818       0.3894
+       E1          exactitud_viterbi 200   0.7821      0.0087   0.7540   0.8079       0.7809       0.7833
+       E1          log_verosimilitud 200 -15.5026      0.1316 -15.9636 -15.0663     -15.5209     -15.4843
+       E1                 error_bw_a  50   0.0424      0.0177   0.0137   0.0945       0.0374       0.0474
+       E1                 error_bw_b  50   0.0319      0.0135   0.0131   0.0706       0.0280       0.0357
+       E1                   error_bw  50   0.0371      0.0129   0.0165   0.0753       0.0335       0.0408
+       E2         tasa_desercion_s16 200   0.2072      0.0253   0.1200   0.2767       0.2037       0.2108
+       E2 semana_primera_desconexion 200   7.4438      0.3756   6.4222   8.7843       7.3914       7.4961
+       E2      prop_nunca_desconecta 200   0.5168      0.0298   0.4433   0.5967       0.5126       0.5209
+       E2          exactitud_viterbi 200   0.7952      0.0081   0.7706   0.8227       0.7940       0.7963
+       E2          log_verosimilitud 200 -15.3019      0.1344 -15.7037 -14.9043     -15.3206     -15.2831
+       E2                 error_bw_a  50   0.0476      0.0195   0.0140   0.1012       0.0420       0.0532
+       E2                 error_bw_b  50   0.0444      0.0167   0.0123   0.0928       0.0396       0.0491
+       E2                   error_bw  50   0.0460      0.0161   0.0188   0.0919       0.0414       0.0506
+       E3         tasa_desercion_s16 200   0.2889      0.0264   0.1967   0.3533       0.2852       0.2926
+       E3 semana_primera_desconexion 200   7.2791      0.3367   6.3869   8.1591       7.2322       7.3261
+       E3      prop_nunca_desconecta 200   0.3856      0.0273   0.3233   0.4667       0.3818       0.3894
+       E3          exactitud_viterbi 200   0.6420      0.0144   0.5890   0.6940       0.6400       0.6440
+       E3          log_verosimilitud 200 -17.3386      0.0414 -17.4704 -17.2139     -17.3443     -17.3328
+       E3                 error_bw_a  50   0.0931      0.0317   0.0115   0.1572       0.0841       0.1022
+       E3                 error_bw_b  50   0.0576      0.0241   0.0174   0.1229       0.0508       0.0645
+       E3                   error_bw  50   0.0754      0.0214   0.0289   0.1292       0.0693       0.0815
+
+==============================================================================
+Proporción por estado en la semana 16 (simulada frente a teórica)
+==============================================================================
+escenario  estado  media  ic_inferior  ic_superior  teorica
+       E1       0 0.5056       0.5016       0.5097   0.5103
+       E1       1 0.2055       0.2023       0.2087   0.2006
+       E1       2 0.2889       0.2852       0.2926   0.2892
+       E2       0 0.6108       0.6070       0.6146   0.6134
+       E2       1 0.1820       0.1790       0.1849   0.1783
+       E2       2 0.2072       0.2037       0.2108   0.2083
+       E3       0 0.5056       0.5016       0.5097   0.5103
+       E3       1 0.2055       0.2023       0.2087   0.2006
+       E3       2 0.2889       0.2852       0.2926   0.2892
+
+==============================================================================
+Baum-Welch según el tamaño de la cohorte (E1)
+==============================================================================
+ estudiantes        metrica  n    media  desviacion   minimo   maximo  ic_inferior  ic_superior
+         300     error_bw_a 50   0.0434      0.0183   0.0146   0.1082       0.0382       0.0486
+         300     error_bw_b 50   0.0338      0.0190   0.0090   0.0764       0.0284       0.0392
+         300       error_bw 50   0.0386      0.0168   0.0166   0.0803       0.0338       0.0434
+         300 iteraciones_bw 50 317.1200    182.4332 104.0000 820.0000     265.2731     368.9669
+        1000     error_bw_a 50   0.0226      0.0087   0.0044   0.0435       0.0201       0.0250
+        1000     error_bw_b 50   0.0167      0.0069   0.0046   0.0324       0.0147       0.0186
+        1000       error_bw 50   0.0196      0.0067   0.0078   0.0354       0.0177       0.0215
+        1000 iteraciones_bw 50 237.5600     74.3366 129.0000 470.0000     216.4338     258.6862
+        3000     error_bw_a 50   0.0117      0.0050   0.0034   0.0257       0.0103       0.0131
+        3000     error_bw_b 50   0.0096      0.0041   0.0016   0.0200       0.0084       0.0108
+        3000       error_bw 50   0.0106      0.0038   0.0036   0.0229       0.0096       0.0117
+        3000 iteraciones_bw 50 234.3400     55.8049 142.0000 407.0000     218.4804     250.1996
+A aprendida media, 300 estudiantes:
+    [0.8405, 0.1269, 0.0326]
+    [0.3196, 0.5308, 0.1495]
+    [0.0589, 0.0838, 0.8573]
+B aprendida media, 300 estudiantes:
+    [0.7093, 0.2428, 0.0479]
+    [0.1784, 0.5224, 0.2993]
+    [0.0325, 0.1754, 0.7921]
+A aprendida media, 1000 estudiantes:
+    [0.8491, 0.1210, 0.0299]
+    [0.3015, 0.5477, 0.1508]
+    [0.0522, 0.0969, 0.8509]
+B aprendida media, 1000 estudiantes:
+    [0.7008, 0.2494, 0.0498]
+    [0.1942, 0.5043, 0.3015]
+    [0.0315, 0.1706, 0.7979]
+A aprendida media, 3000 estudiantes:
+    [0.8508, 0.1188, 0.0304]
+    [0.2932, 0.5596, 0.1472]
+    [0.0516, 0.0960, 0.8524]
+B aprendida media, 3000 estudiantes:
+    [0.6999, 0.2506, 0.0495]
+    [0.2025, 0.4970, 0.3005]
+    [0.0297, 0.1711, 0.7992]
+
+==============================================================================
+Sensibilidad determinista (P3)
+==============================================================================
+                  configuracion                    metrica   n    media  desviacion   minimo   maximo  ic_inferior  ic_superior
+                        Nominal         tasa_desercion_s16 200   0.2889      0.0264   0.1967   0.3533       0.2852       0.2926
+                        Nominal semana_primera_desconexion 200   7.2791      0.3367   6.3869   8.1591       7.2322       7.3261
+                        Nominal      prop_nunca_desconecta 200   0.3856      0.0273   0.3233   0.4667       0.3818       0.3894
+                        Nominal          exactitud_viterbi 200   0.7821      0.0087   0.7540   0.8079       0.7809       0.7833
+                        Nominal  exactitud_viterbi_nominal 200   0.7821      0.0087   0.7540   0.8079       0.7809       0.7833
+                        Nominal          log_verosimilitud 200 -15.5026      0.1316 -15.9636 -15.0663     -15.5209     -15.4843
+pi optimista [0.85, 0.12, 0.03]         tasa_desercion_s16 200   0.2860      0.0264   0.1933   0.3500       0.2823       0.2897
+pi optimista [0.85, 0.12, 0.03] semana_primera_desconexion 200   7.7783      0.3178   6.8868   8.5503       7.7340       7.8227
+pi optimista [0.85, 0.12, 0.03]      prop_nunca_desconecta 200   0.4075      0.0272   0.3533   0.4833       0.4037       0.4113
+pi optimista [0.85, 0.12, 0.03]          exactitud_viterbi 200   0.7921      0.0089   0.7683   0.8173       0.7909       0.7934
+pi optimista [0.85, 0.12, 0.03]  exactitud_viterbi_nominal 200   0.7919      0.0087   0.7675   0.8158       0.7907       0.7932
+pi optimista [0.85, 0.12, 0.03]          log_verosimilitud 200 -15.3468      0.1305 -15.7993 -14.8623     -15.3650     -15.3286
+pi pesimista [0.50, 0.35, 0.15]         tasa_desercion_s16 200   0.2949      0.0269   0.2100   0.3567       0.2911       0.2986
+pi pesimista [0.50, 0.35, 0.15] semana_primera_desconexion 200   6.0845      0.3230   5.2165   6.8398       6.0395       6.1296
+pi pesimista [0.50, 0.35, 0.15]      prop_nunca_desconecta 200   0.3326      0.0271   0.2400   0.4033       0.3288       0.3364
+pi pesimista [0.50, 0.35, 0.15]          exactitud_viterbi 200   0.7748      0.0090   0.7500   0.8029       0.7735       0.7760
+pi pesimista [0.50, 0.35, 0.15]  exactitud_viterbi_nominal 200   0.7722      0.0089   0.7469   0.8008       0.7710       0.7735
+pi pesimista [0.50, 0.35, 0.15]          log_verosimilitud 200 -15.6206      0.1312 -15.9289 -15.2325     -15.6389     -15.6023
+    pi uniforme [1/3, 1/3, 1/3]         tasa_desercion_s16 200   0.3030      0.0280   0.2167   0.3767       0.2991       0.3069
+    pi uniforme [1/3, 1/3, 1/3] semana_primera_desconexion 200   4.5123      0.3002   3.7403   5.3304       4.4704       4.5541
+    pi uniforme [1/3, 1/3, 1/3]      prop_nunca_desconecta 200   0.2549      0.0263   0.1833   0.3233       0.2513       0.2586
+    pi uniforme [1/3, 1/3, 1/3]          exactitud_viterbi 200   0.7742      0.0087   0.7473   0.7965       0.7730       0.7755
+    pi uniforme [1/3, 1/3, 1/3]  exactitud_viterbi_nominal 200   0.7676      0.0092   0.7379   0.7892       0.7663       0.7688
+    pi uniforme [1/3, 1/3, 1/3]          log_verosimilitud 200 -15.5664      0.1283 -15.8835 -15.1250     -15.5843     -15.5485
+                 diag(A) + 0.05         tasa_desercion_s16 200   0.2828      0.0264   0.1933   0.3633       0.2791       0.2865
+                 diag(A) + 0.05 semana_primera_desconexion 200   7.3157      0.3949   6.3780   8.4907       7.2606       7.3708
+                 diag(A) + 0.05      prop_nunca_desconecta 200   0.5001      0.0280   0.4233   0.5700       0.4962       0.5041
+                 diag(A) + 0.05          exactitud_viterbi 200   0.8234      0.0091   0.7981   0.8498       0.8221       0.8247
+                 diag(A) + 0.05  exactitud_viterbi_nominal 200   0.8263      0.0089   0.8021   0.8527       0.8251       0.8275
+                 diag(A) + 0.05          log_verosimilitud 200 -14.9065      0.1521 -15.3024 -14.5188     -14.9277     -14.8852
+                 diag(A) - 0.05         tasa_desercion_s16 200   0.2842      0.0258   0.2133   0.3500       0.2805       0.2878
+                 diag(A) - 0.05 semana_primera_desconexion 200   7.1215      0.3140   6.3379   7.9757       7.0777       7.1652
+                 diag(A) - 0.05      prop_nunca_desconecta 200   0.2990      0.0259   0.2367   0.3633       0.2954       0.3026
+                 diag(A) - 0.05          exactitud_viterbi 200   0.7474      0.0086   0.7167   0.7685       0.7462       0.7486
+                 diag(A) - 0.05  exactitud_viterbi_nominal 200   0.7447      0.0086   0.7183   0.7640       0.7435       0.7459
+                 diag(A) - 0.05          log_verosimilitud 200 -15.9414      0.1101 -16.1801 -15.6012     -15.9568     -15.9261
+                 diag(B) + 0.05         tasa_desercion_s16 200   0.2889      0.0264   0.1967   0.3533       0.2852       0.2926
+                 diag(B) + 0.05 semana_primera_desconexion 200   7.2791      0.3367   6.3869   8.1591       7.2322       7.3261
+                 diag(B) + 0.05      prop_nunca_desconecta 200   0.3856      0.0273   0.3233   0.4667       0.3818       0.3894
+                 diag(B) + 0.05          exactitud_viterbi 200   0.8075      0.0081   0.7835   0.8327       0.8064       0.8086
+                 diag(B) + 0.05  exactitud_viterbi_nominal 200   0.7990      0.0086   0.7769   0.8258       0.7978       0.8002
+                 diag(B) + 0.05          log_verosimilitud 200 -14.9178      0.1443 -15.3725 -14.4953     -14.9379     -14.8976
+                 diag(B) - 0.05         tasa_desercion_s16 200   0.2889      0.0264   0.1967   0.3533       0.2852       0.2926
+                 diag(B) - 0.05 semana_primera_desconexion 200   7.2791      0.3367   6.3869   8.1591       7.2322       7.3261
+                 diag(B) - 0.05      prop_nunca_desconecta 200   0.3856      0.0273   0.3233   0.4667       0.3818       0.3894
+                 diag(B) - 0.05          exactitud_viterbi 200   0.7593      0.0094   0.7283   0.7887       0.7580       0.7606
+                 diag(B) - 0.05  exactitud_viterbi_nominal 200   0.7622      0.0090   0.7306   0.7929       0.7609       0.7634
+                 diag(B) - 0.05          log_verosimilitud 200 -15.9801      0.1134 -16.3427 -15.6429     -15.9959     -15.9643
+
+==============================================================================
+Sensibilidad a perturbaciones aleatorias (+/-0.05, 30 por matriz, 50 réplicas cada una)
+==============================================================================
+matriz                                A        B
+cambio_max_absoluto       mean   0.0515   0.0480
+                          std    0.0105   0.0086
+                          min    0.0338   0.0315
+                          max    0.0725   0.0706
+tasa_desercion_s16        mean   0.3081   0.2903
+                          std    0.1007   0.0000
+                          min    0.1472   0.2903
+                          max    0.5043   0.2903
+exactitud_viterbi         mean   0.7856   0.7834
+                          std    0.0230   0.0208
+                          min    0.7364   0.7541
+                          max    0.8249   0.8232
+exactitud_viterbi_nominal mean   0.7830   0.7785
+                          std    0.0253   0.0129
+                          min    0.7285   0.7560
+                          max    0.8273   0.7988
+log_verosimilitud         mean -15.4443 -15.5124
+                          std    0.3461   0.4539
+                          min  -16.1099 -16.1671
+                          max  -14.7987 -14.6381
+
+==============================================================================
+Sensibilidad por entrada de A (+/-0.05 en una entrada y fila renormalizada; 200 réplicas)
+==============================================================================
+Deserción teórica nominal: 0.2892
+                     entrada  valor_nominal   delta  valor_nuevo  cambio_efectivo  cambio_relativo  desercion_teorica  desercion_simulada  ic_inferior  ic_superior  cambio_desercion_simulada  efecto_por_unidad
+Comprometido -> Desconectado         0.0300  0.0500       0.0762           0.0462           1.5397             0.3928              0.3947       0.3905       0.3988                     0.1055             2.2433
+Comprometido -> Desconectado         0.0300 -0.0500       0.0010          -0.0290          -0.9657             0.1999              0.1988       0.1956       0.2019                    -0.0904             3.0834
+Desconectado -> Comprometido         0.0500 -0.0500       0.0011          -0.0489          -0.9790             0.3619              0.3622       0.3584       0.3659                     0.0730            -1.4852
+   Desconectado -> En riesgo         0.1000 -0.0500       0.0526          -0.0474          -0.4737             0.3449              0.3451       0.3414       0.3489                     0.0560            -1.1755
+Desconectado -> Comprometido         0.0500  0.0500       0.0952           0.0452           0.9048             0.2412              0.2403       0.2368       0.2438                    -0.0489            -1.0605
+   En riesgo -> Desconectado         0.1500 -0.0500       0.1053          -0.0447          -0.2982             0.2460              0.2449       0.2412       0.2485                    -0.0443             0.9645
+   Desconectado -> En riesgo         0.1000  0.0500       0.1429           0.0429           0.4286             0.2509              0.2504       0.2468       0.2539                    -0.0388            -0.8923
+   En riesgo -> Desconectado         0.1500  0.0500       0.1905           0.0405           0.2698             0.3243              0.3247       0.3208       0.3285                     0.0355             0.8667
+   Comprometido -> En riesgo         0.1200 -0.0500       0.0737          -0.0463          -0.3860             0.2638              0.2637       0.2599       0.2674                    -0.0255             0.5489
+   Comprometido -> En riesgo         0.1200  0.0500       0.1619           0.0419           0.3492             0.3078              0.3077       0.3040       0.3114                     0.0185             0.4432
+   En riesgo -> Comprometido         0.3000 -0.0500       0.2632          -0.0368          -0.1228             0.3045              0.3043       0.3005       0.3081                     0.0151            -0.4159
+   En riesgo -> Comprometido         0.3000  0.0500       0.3333           0.0333           0.1111             0.2765              0.2757       0.2720       0.2794                    -0.0135            -0.3796
+Desconectado -> Desconectado         0.8500 -0.0500       0.8421          -0.0079          -0.0093             0.2802              0.2795       0.2759       0.2832                    -0.0096             1.1424
+Desconectado -> Desconectado         0.8500  0.0500       0.8571           0.0071           0.0084             0.2978              0.2972       0.2934       0.3009                     0.0080             1.2035
+Comprometido -> Comprometido         0.8500 -0.0500       0.8421          -0.0079          -0.0093             0.2971              0.2975       0.2938       0.3013                     0.0083            -0.9985
+Comprometido -> Comprometido         0.8500  0.0500       0.8571           0.0071           0.0084             0.2817              0.2810       0.2773       0.2846                    -0.0082            -1.0447
+      En riesgo -> En riesgo         0.5500 -0.0500       0.5263          -0.0237          -0.0431             0.2922              0.2914       0.2877       0.2950                     0.0022            -0.1277
+      En riesgo -> En riesgo         0.5500  0.0500       0.5714           0.0214           0.0390             0.2862              0.2854       0.2816       0.2891                    -0.0038            -0.1384
+
+==============================================================================
+Atribución por fila de las perturbaciones aleatorias de A (teórica)
+==============================================================================
+Diferencia máxima |simulada - teórica| en la deserción: 0.0064
+Solo fila Comprometido: varianza explicada 0.5884; |cambio| medio 0.0688
+Solo fila En riesgo: varianza explicada 0.0616; |cambio| medio 0.0217
+Solo fila Desconectado: varianza explicada 0.2544; |cambio| medio 0.0402
+Correlación entre el cambio de cada entrada y la deserción simulada:
+    Comprometido -> Comprometido: -0.6351
+    Comprometido -> En riesgo: +0.0447
+    Comprometido -> Desconectado: +0.7810
+    En riesgo -> Comprometido: -0.2374
+    En riesgo -> En riesgo: -0.2051
+    En riesgo -> Desconectado: +0.4259
+    Desconectado -> Comprometido: -0.4179
+    Desconectado -> En riesgo: -0.2595
+    Desconectado -> Desconectado: +0.5003
+
+==============================================================================
+Viterbi de la plantilla (sin logaritmos) frente al logarítmico
+==============================================================================
+ semanas  log_prob_logaritmico  prob_plantilla  subdesborda  coincidencia_ruta
+      16            -17.763322    1.929690e-08        False           1.000000
+      50            -66.974287    8.192883e-30        False           1.000000
+     100           -125.091504    4.714655e-55        False           1.000000
+     200           -221.584551    5.848603e-97        False           1.000000
+     300           -337.995521   1.623343e-147        False           1.000000
+     400           -468.202017   4.596715e-204        False           1.000000
+     500           -586.824741   1.397182e-255        False           1.000000
+     750           -853.495284    0.000000e+00         True           0.918667
+    1000          -1154.660914    0.000000e+00         True           0.876000
+    5000          -5675.778576    0.000000e+00         True           0.633400
+
+==============================================================================
+Tiempos de simulación: bucles frente a vectorizada (mejor de 3)
+==============================================================================
+ estudiantes  semanas  segundos_bucles  segundos_vectorizada  aceleracion
+         100       16           0.1687                0.0010     176.4899
+         300       16           0.4871                0.0016     303.7165
+        1000       16           1.4897                0.0032     465.9693
+        3000       16           4.5045                0.0088     514.5080
+       10000       16          15.5400                0.0288     540.4762
+
+==============================================================================
+Figura 1
+==============================================================================
+Estudiante 0 de la réplica 0 de E1 (primero que pasa por los tres estados).
