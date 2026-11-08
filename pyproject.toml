@@ -1,0 +1,15 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.pylint.main]
+py-version = "3.12"
+
+[tool.pylint.design]
+# baum_welch(obs, pi, *, a_inicial, b_inicial, max_iter, tol) y la clase HMM
+# (pi, A, B, sus logaritmos y los nombres de estados y observaciones).
+max-args = 6
+max-attributes = 8
+
+[tool.pylint.format]
+max-line-length = 100
