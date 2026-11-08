@@ -289,7 +289,8 @@ def _efecto_por_entrada(eje, entradas: pd.DataFrame) -> None:
     eje.set_yticks(range(len(orden)), orden, fontsize=7)
     eje.set_xlabel("Cambio en la tasa de deserción (semana 16) frente al nominal")
     eje.set_title("Una entrada de A a la vez (media e IC 95 %)", fontsize=9)
-    eje.legend(loc="lower right")
+    eje.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2, fontsize=7,
+              frameon=False)
     eje.grid(axis="y", visible=False)
     eje.set_axisbelow(True)
 
@@ -312,7 +313,7 @@ def sensibilidad_entradas(entradas: pd.DataFrame, atribucion: pd.DataFrame,
                           ruta: Path) -> Path:
     """Cambio en la deserción al perturbar cada entrada de A y peso de cada fila."""
     figura, (izquierda, derecha) = plt.subplots(
-        1, 2, figsize=(10, 4.2), gridspec_kw={"width_ratios": [2.2, 1]})
+        1, 2, figsize=(8.4, 4.4), gridspec_kw={"width_ratios": [2.1, 1]})
     _efecto_por_entrada(izquierda, entradas)
     _participacion_filas(derecha, atribucion)
     figura.suptitle("¿Qué entrada de A pesa más en la deserción?")
