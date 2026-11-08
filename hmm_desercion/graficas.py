@@ -95,8 +95,9 @@ def _limitar_desde(eje, replicas, columna, claves, desde: int) -> None:
     for clave in claves:
         valores = replicas.loc[replicas["escenario"] == clave, columna].dropna().to_numpy()
         curva = metricas.convergencia(valores)
-        bajos.append(np.nanmin(curva["ic_inferior"][desde - 1:]))
-        altos.append(np.nanmax(curva["ic_superior"][desde - 1:]))
+        inicio = min(desde, len(valores)) - 1
+        bajos.append(np.nanmin(curva["ic_inferior"][inicio:]))
+        altos.append(np.nanmax(curva["ic_superior"][inicio:]))
     margen = 0.15 * (max(altos) - min(bajos))
     eje.set_ylim(min(bajos) - margen, max(altos) + margen)
 
