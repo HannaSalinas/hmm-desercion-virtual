@@ -326,4 +326,4 @@ La lista completa (22 referencias) está en el artículo que acompaña la entreg
 
 ## Video
 
-[PENDIENTE: enlace del video]
+[Ver el video del proyecto](https://drive.google.com/file/d/18PjQV-LVjBn8eM2yQLUSN8CjXhXQJJvS/view?usp=sharing)
